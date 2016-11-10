@@ -63,16 +63,20 @@ async def http_ipc_handle_routes_add(request):
 
 async def http_ipc_handle_interfaces_get(request):
     terminal = request.match_info['terminal']
-    if terminal not in ("hdr-aj-nb", "hdr-wb"):
+    if terminal not in ("term00", "term01"):
         return response_error("a valid terminal name is required")
-    response_data = {'eth0': { "ip-addr": "192.168.1.1" } }
+    if terminal not in request.app["conf"]["interfaces_default_data"]:
+        # a simple default value for now
+        response_data = {'eth0': { "ip-addr": "192.168.1.1" } }
+    response_data = request.app["conf"]["interfaces_default_data"][terminal]
     body = json.dumps(response_data).encode('utf-8')
     return aiohttp.web.Response(body=body, content_type="application/json") 
 
 
-def http_ipc_init(db, loop):
+def http_ipc_init(db, loop, conf):
     app = aiohttp.web.Application(loop=loop)
     app['db'] = db
+    app['conf'] = conf
     app.router.add_route('*', conf.ipc.path_routes_add,
                          http_ipc_handle_routes_add)
     app.router.add_route('*', conf.ipc.path_interfaces_get,
@@ -94,7 +98,7 @@ def db_init():
 def main(conf):
     db = db_init()
     loop = asyncio.get_event_loop()
-    http_ipc_init(db, loop)
+    http_ipc_init(db, loop, conf)
 
     try:
         loop.run_forever()
