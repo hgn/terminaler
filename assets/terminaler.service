@@ -1,0 +1,9 @@
+[Unit]
+Description=Terminaler
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/python3 /usr/bin/terminaler
+
+[Install]
+WantedBy=multi-user.target
