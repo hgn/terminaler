@@ -12,6 +12,6 @@
 
 	"interfaces_default_data" : {
 		"term00" : { "eth0" : { "ipv4-addr" : "192.168.1.1" }, "air0" : { "ipv4-addr" : "168.18.1.1" } },
-		"term00" : { "eth0" : { "ipv4-addr" : "192.168.2.1" }, "air0" : { "ipv4-addr" : "168.19.1.1" } }
+		"term01" : { "eth0" : { "ipv4-addr" : "192.168.2.1" }, "air0" : { "ipv4-addr" : "168.19.1.1" } }
 	}
 }
