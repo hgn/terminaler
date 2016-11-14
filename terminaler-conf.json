@@ -6,16 +6,18 @@
 	"ipc" : {
 		"v4_listen_addr" : "0.0.0.0",
 		"v4_listen_port" : "5180",
-		"path_routes_add"     : "/api/v1/{terminal}/routes-set",
+		"path_routes_set"     : "/api/v1/{terminal}/routes-set",
 		"path_interfaces_get" : "/api/v1/{terminal}/interfaces"
 	},
 
 	"terminals" : {
 		"term00" : {
-			"ipv4-addr" : "10.10.10.10", "port": "8080", "raw-exec-path" : "v1/raw"
+			"type" : "cc-rest",
+			"ipv4-addr" : "10.10.10.10", "port": "8080", "raw-exec-path" : "/v1/raw/"
 		},
 		"term01" : {
-			"ipv4-addr" : "10.10.10.10", "port": "8080", "raw-exec-path" : "v1/raw"
+			"type" : "cc-rest",
+			"ipv4-addr" : "10.10.10.10", "port": "8080", "raw-exec-path" : "/v1/raw/"
 		}
 	},
 

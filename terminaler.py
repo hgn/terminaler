@@ -48,13 +48,23 @@ def response_error(msg):
     body = json.dumps(response_data).encode('utf-8')
     return aiohttp.web.Response(body=body, content_type="application/json") 
 
-async def http_ipc_handle_routes_add(request):
+def route_set_cc_rest(request, ip_addr, port, path):
+
+async def http_ipc_handle_routes_set(request):
     if not request.has_body:
         return response_error("data has no JSON body")
     terminal = request.match_info['terminal']
     request_data = addict.Dict(await request.json())
-    fmt = "received route changes for terminal {}\n"
-    err(fmt.format(terminal))
+    conf = request.app["conf"]
+
+    if terminal in conf["terminals"]:
+        if conf["terminals"][terminal]["type"] == "cc-rest":
+            addr = conf["terminals"][terminal]["ipv4-addr"]
+            port = conf["terminals"][terminal]["port"]
+            path = conf["terminals"][terminal]["raw-exec-path"]
+            route_set_cc_rest(request, addr, port, path)
+
+
     debugpp(request_data)
     response_data = {'status': 'ok'}
     body = json.dumps(response_data).encode('utf-8')
@@ -77,8 +87,8 @@ def http_ipc_init(db, loop, conf):
     app = aiohttp.web.Application(loop=loop)
     app['db'] = db
     app['conf'] = conf
-    app.router.add_route('*', conf.ipc.path_routes_add,
-                         http_ipc_handle_routes_add)
+    app.router.add_route('*', conf.ipc.path_routes_set,
+                         http_ipc_handle_routes_set)
     app.router.add_route('*', conf.ipc.path_interfaces_get,
                          http_ipc_handle_interfaces_get)
     server = loop.create_server(app.make_handler(),
