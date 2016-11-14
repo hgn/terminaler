@@ -2,7 +2,7 @@
 Description=Terminaler
 
 [Service]
-Type=forking
+Type=simple
 ExecStart=/usr/bin/python3 /usr/bin/terminaler
 
 [Install]
